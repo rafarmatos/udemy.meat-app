@@ -6,6 +6,7 @@ import {log} from 'util';
   templateUrl: './order-summary.component.html'
 })
 export class OrderSummaryComponent implements OnInit {
+  rated: boolean;
 
   constructor() { }
 
@@ -14,6 +15,9 @@ export class OrderSummaryComponent implements OnInit {
   enviarAvaliacao(r: number) {
     log(`Teste: ${r}`);
     /*Aqui eu chamo o service que enviaria um post com a nota da avaliação*/
+  }
+  rate() {
+    this.rated = true;
   }
 
 }
