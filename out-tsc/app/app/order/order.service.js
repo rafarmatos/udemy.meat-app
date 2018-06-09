@@ -9,12 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Injectable } from '@angular/core';
 import { ShoppingCartService } from '../restaurant-detail/shopping-cart/shopping-cart.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MEAT_API } from '../app.api';
+import { LoginService } from '../security/login/login.service';
 var OrderService = (function () {
-    function OrderService(cartService, http) {
+    function OrderService(cartService, http, loginService) {
         this.cartService = cartService;
         this.http = http;
+        this.loginService = loginService;
     }
     OrderService.prototype.itemsValue = function () {
         return this.cartService.total();
@@ -35,12 +37,18 @@ var OrderService = (function () {
         this.cartService.clear();
     };
     OrderService.prototype.checkOrder = function (order) {
-        return this.http.post(MEAT_API + "/orders", order)
+        var headers = new HttpHeaders();
+        if (this.loginService.isLoogedIn()) {
+            headers = headers.set('Authorization', "Bearer " + this.loginService.user.accessToken);
+        }
+        return this.http.post(MEAT_API + "/orders", order, { headers: headers })
             .map(function (order) { return order.id; });
     };
     OrderService = __decorate([
         Injectable(),
-        __metadata("design:paramtypes", [ShoppingCartService, HttpClient])
+        __metadata("design:paramtypes", [ShoppingCartService,
+            HttpClient,
+            LoginService])
     ], OrderService);
     return OrderService;
 }());

@@ -15,6 +15,8 @@ import { OrderService } from '../order/order.service';
 import { RestaurantsService } from '../restaurants/restaurants.service';
 import { SnackbarComponent } from './massages/snackbar/snackbar.component';
 import { NotificationService } from './massages/snackbar/notification.service';
+import { LoginService } from '../security/login/login.service';
+import { LoggedInGuard } from '../security/loggedin.guard';
 var SharedModule = (function () {
     function SharedModule() {
     }
@@ -22,7 +24,12 @@ var SharedModule = (function () {
     SharedModule.forRoot = function () {
         return {
             ngModule: SharedModule_1,
-            providers: [ShoppingCartService, RestaurantsService, OrderService, NotificationService]
+            providers: [ShoppingCartService,
+                RestaurantsService,
+                OrderService,
+                NotificationService,
+                LoginService,
+                LoggedInGuard]
         };
     };
     SharedModule = SharedModule_1 = __decorate([

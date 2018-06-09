@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,21 +8,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
-var AppComponent = (function () {
-    function AppComponent() {
-        this.content = 'Welcome do Meat App!';
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@angular/core");
+let LoginComponent = class LoginComponent {
+    constructor() { }
+    ngOnInit() {
     }
-    AppComponent.prototype.ngOnInit = function () {
-    };
-    AppComponent = __decorate([
-        Component({
-            selector: 'mt-app',
-            templateUrl: 'app.component.html'
-        }),
-        __metadata("design:paramtypes", [])
-    ], AppComponent);
-    return AppComponent;
-}());
-export { AppComponent };
-//# sourceMappingURL=app.component.js.map
+};
+LoginComponent = __decorate([
+    core_1.Component({
+        selector: 'mt-login',
+        templateUrl: './login.component.html',
+        styleUrls: ['./login.component.css']
+    }),
+    __metadata("design:paramtypes", [])
+], LoginComponent);
+exports.LoginComponent = LoginComponent;
+//# sourceMappingURL=login.component.js.map
