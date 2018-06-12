@@ -11,8 +11,8 @@ import { Component } from '@angular/core';
 import { OrderService } from './order.service';
 import { OrderItem } from './order.model';
 import { Router } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
-var OrderComponent = (function () {
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+var OrderComponent = /** @class */ (function () {
     function OrderComponent(orderService, router, formBuilder) {
         this.orderService = orderService;
         this.router = router;
@@ -41,15 +41,17 @@ var OrderComponent = (function () {
         return undefined;
     };
     OrderComponent.prototype.ngOnInit = function () {
-        this.orderForm = this.formBuilder.group({
-            name: this.formBuilder.control('', [Validators.required, Validators.minLength(5)]),
+        this.orderForm = new FormGroup({
+            /*desse jeito*/
+            name: new FormControl('', { validators: [Validators.required, Validators.minLength(5)] }),
+            /*ou assim*/
             email: this.formBuilder.control('', [Validators.required, Validators.pattern(this.emailPattern)]),
             emailConfirmation: this.formBuilder.control('', [Validators.required, Validators.pattern(this.emailPattern)]),
             adress: this.formBuilder.control('', [Validators.required, Validators.minLength(5)]),
             number: this.formBuilder.control('', [Validators.required, Validators.pattern(this.numberPattern)]),
             optionalAddress: this.formBuilder.control(''),
             paymentOptions: this.formBuilder.control('', [Validators.required])
-        }, { validator: OrderComponent_1.equalsTo });
+        }, { validators: [OrderComponent_1.equalsTo], updateOn: 'blur' });
     };
     OrderComponent.prototype.itemsValue = function () {
         return this.orderService.itemsValue();
@@ -68,11 +70,19 @@ var OrderComponent = (function () {
     };
     OrderComponent.prototype.checkOrder = function (order) {
         var _this = this;
-        order.orderItems = this.cartItems().map(function (item) { return new OrderItem(item.quantity, item.menuItem.id); });
-        this.orderService.checkOrder(order).subscribe(function (orderId) {
+        order.orderItems = this.cartItems()
+            .map(function (item) { return new OrderItem(item.quantity, item.menuItem.id); });
+        this.orderService.checkOrder(order)
+            .do(function (orderId) {
+            _this.orderId = orderId;
+        })
+            .subscribe(function (orderId) {
             _this.router.navigate(['/order-summary']);
             _this.orderService.clear();
         });
+    };
+    OrderComponent.prototype.isOrderCompleted = function () {
+        return this.orderId !== undefined;
     };
     OrderComponent = OrderComponent_1 = __decorate([
         Component({

@@ -10,10 +10,11 @@ import { OrderItemsComponent } from './order-items/order-items.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { DeliveryCostsComponent } from './delivery-costs/delivery-costs.component';
+import { LeaveOrderGuard } from './leave-order.guard';
 var ROUTES = [
-    { path: '', component: OrderComponent }
+    { path: '', component: OrderComponent, canDeactivate: [LeaveOrderGuard] }
 ];
-var OrderModule = (function () {
+var OrderModule = /** @class */ (function () {
     function OrderModule() {
     }
     OrderModule = __decorate([

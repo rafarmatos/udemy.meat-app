@@ -4,7 +4,7 @@ import {OrderService} from './order.service';
 import {CartItem} from '../restaurant-detail/shopping-cart/cart-item.model';
 import {Order, OrderItem} from './order.model';
 import {Router} from '@angular/router';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'mt-order',
@@ -15,6 +15,7 @@ export class OrderComponent implements OnInit {
   delivery = 8;
   emailPattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   numberPattern = /^[0-9]*$/;
+  orderId: string;
   paymentOptions: RadioOption [] = [
     {label: 'Dinheiro', value: 'MON'},
     {label: 'Cartão de Débito', value: 'DEB'},
@@ -38,15 +39,17 @@ export class OrderComponent implements OnInit {
               private router: Router,
               private formBuilder: FormBuilder) { }
   ngOnInit() {
-    this.orderForm = this.formBuilder.group({
-      name: this.formBuilder.control('', [Validators.required, Validators.minLength(5)]),
+    this.orderForm = new FormGroup({
+      /*desse jeito*/
+      name: new FormControl('', {validators: [Validators.required, Validators.minLength(5)]}),
+      /*ou assim*/
       email: this.formBuilder.control('', [Validators.required, Validators.pattern(this.emailPattern)]),
       emailConfirmation: this.formBuilder.control('', [Validators.required, Validators.pattern(this.emailPattern)]),
       adress: this.formBuilder.control('', [Validators.required, Validators.minLength(5)]),
       number: this.formBuilder.control('', [Validators.required, Validators.pattern(this.numberPattern)]),
       optionalAddress: this.formBuilder.control(''),
       paymentOptions: this.formBuilder.control('', [Validators.required])
-    }, {validator: OrderComponent.equalsTo});
+    }, {validators: [OrderComponent.equalsTo], updateOn: 'blur'});
   }
 
   itemsValue(): number {
@@ -65,11 +68,21 @@ export class OrderComponent implements OnInit {
     this.orderService.remove(item);
   }
   checkOrder (order: Order) {
-    order.orderItems = this.cartItems().map((item: CartItem) => new OrderItem(item.quantity, item.menuItem.id));
-    this.orderService.checkOrder(order).subscribe( (orderId: string) => {
+    order.orderItems = this.cartItems()
+      .map((item: CartItem) => new OrderItem(item.quantity, item.menuItem.id));
+
+    this.orderService.checkOrder(order)
+      .do((orderId: string) => {
+      this.orderId = orderId
+    })
+      .subscribe( (orderId: string) => {
       this.router.navigate(['/order-summary']);
       this.orderService.clear();
     });
+  }
+
+  isOrderCompleted(): boolean {
+    return this.orderId !== undefined;
   }
 
 }

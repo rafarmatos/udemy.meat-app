@@ -17,7 +17,10 @@ import { SnackbarComponent } from './massages/snackbar/snackbar.component';
 import { NotificationService } from './massages/snackbar/notification.service';
 import { LoginService } from '../security/login/login.service';
 import { LoggedInGuard } from '../security/loggedin.guard';
-var SharedModule = (function () {
+import { LeaveOrderGuard } from '../order/leave-order.guard';
+import { AuthInterceptor } from '../security/auth.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+var SharedModule = /** @class */ (function () {
     function SharedModule() {
     }
     SharedModule_1 = SharedModule;
@@ -29,7 +32,9 @@ var SharedModule = (function () {
                 OrderService,
                 NotificationService,
                 LoginService,
-                LoggedInGuard]
+                LoggedInGuard,
+                LeaveOrderGuard,
+                { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }]
         };
     };
     SharedModule = SharedModule_1 = __decorate([

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { log } from 'util';
-var OrderSummaryComponent = (function () {
+var OrderSummaryComponent = /** @class */ (function () {
     function OrderSummaryComponent() {
     }
     OrderSummaryComponent.prototype.ngOnInit = function () {

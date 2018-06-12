@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {LoginService} from '../../security/login/login.service';
+import {User} from '../../security/login/user.model';
 
 @Component({
   selector: 'mt-user-detail',
@@ -7,9 +9,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserDetailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private loginService: LoginService) { }
 
   ngOnInit() {
   }
 
+  user(): User {
+      return this.loginService.user;
+  }
+
+  isLoggedIn(): boolean {
+    return this.loginService.isLoogedIn()
+  }
+
+  login() {
+    this.loginService.handleLogin()
+  }
+
+  logout() {
+    this.loginService.logout()
+  }
 }
