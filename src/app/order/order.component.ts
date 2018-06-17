@@ -3,6 +3,7 @@ import {RadioOption} from '../shared/radio/radio-option.model';
 import {OrderService} from './order.service';
 import {CartItem} from '../restaurant-detail/shopping-cart/cart-item.model';
 import {Order, OrderItem} from './order.model';
+import {tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -72,9 +73,11 @@ export class OrderComponent implements OnInit {
       .map((item: CartItem) => new OrderItem(item.quantity, item.menuItem.id));
 
     this.orderService.checkOrder(order)
-      .do((orderId: string) => {
-      this.orderId = orderId
-    })
+      .pipe(
+        tap((orderId: string) => {
+          this.orderId = orderId
+        })
+      )
       .subscribe( (orderId: string) => {
       this.router.navigate(['/order-summary']);
       this.orderService.clear();

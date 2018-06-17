@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { OrderService } from './order.service';
 import { OrderItem } from './order.model';
+import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 var OrderComponent = /** @class */ (function () {
@@ -73,9 +74,9 @@ var OrderComponent = /** @class */ (function () {
         order.orderItems = this.cartItems()
             .map(function (item) { return new OrderItem(item.quantity, item.menuItem.id); });
         this.orderService.checkOrder(order)
-            .do(function (orderId) {
+            .pipe(tap(function (orderId) {
             _this.orderId = orderId;
-        })
+        }))
             .subscribe(function (orderId) {
             _this.router.navigate(['/order-summary']);
             _this.orderService.clear();

@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Injectable } from '@angular/core';
 import { ShoppingCartService } from '../restaurant-detail/shopping-cart/shopping-cart.service';
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { MEAT_API } from '../app.api';
 var OrderService = /** @class */ (function () {
@@ -36,7 +37,7 @@ var OrderService = /** @class */ (function () {
     };
     OrderService.prototype.checkOrder = function (order) {
         return this.http.post(MEAT_API + "/orders", order)
-            .map(function (order) { return order.id; });
+            .pipe(map(function (order) { return order.id; }));
     };
     OrderService = __decorate([
         Injectable(),

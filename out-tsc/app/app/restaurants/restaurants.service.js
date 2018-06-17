@@ -9,8 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Injectable } from '@angular/core';
 import { MEAT_API } from '../app.api';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
 import { HttpClient, HttpParams } from '@angular/common/http';
 var RestaurantsService = /** @class */ (function () {
     function RestaurantsService(http) {

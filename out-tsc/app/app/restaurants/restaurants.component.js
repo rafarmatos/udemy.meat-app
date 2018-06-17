@@ -11,13 +11,8 @@ import { Component } from '@angular/core';
 import { RestaurantsService } from './restaurants.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { FormBuilder } from '@angular/forms';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/from';
-import { Observable } from 'rxjs/Observable';
+import { switchMap, tap, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
+import { from } from 'rxjs';
 var RestaurantsComponent = /** @class */ (function () {
     function RestaurantsComponent(restaurantsService, fb) {
         this.restaurantsService = restaurantsService;
@@ -31,13 +26,10 @@ var RestaurantsComponent = /** @class */ (function () {
             searchControl: this.searchControl
         });
         this.searchControl.valueChanges
-            .debounceTime(500)
-            .distinctUntilChanged()
-            .do(function (searchTerm) { return console.log("q=" + searchTerm); })
-            .switchMap(function (searchTerm) {
+            .pipe(debounceTime(500), distinctUntilChanged(), tap(function (searchTerm) { return console.log("q=" + searchTerm); }), switchMap(function (searchTerm) {
             return _this.restaurantsService.restaurants(searchTerm)
-                .catch(function (error) { return Observable.from([]); });
-        })
+                .pipe(catchError(function (error) { return from([]); }));
+        }))
             .subscribe(function (restaurants) { return _this.restaurants = restaurants; });
         this.restaurantsService.restaurants().subscribe(function (restaurants) { return _this.restaurants = restaurants; });
     };

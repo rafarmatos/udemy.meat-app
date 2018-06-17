@@ -1,4 +1,4 @@
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorHandler, Injectable, Injector, NgZone} from '@angular/core';
 import {NotificationService} from './shared/massages/snackbar/notification.service';
@@ -13,7 +13,7 @@ export class ApplicationErrorHandler extends ErrorHandler {
   }
 
   handleError(errorResponse: HttpErrorResponse | any) {
-    if (errorResponse instanceof HttpErrorResponse){
+    if (errorResponse instanceof HttpErrorResponse) {
       const message = errorResponse.error.message
       this.zone.run(() => {
         switch (errorResponse.status) {
